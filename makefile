@@ -9,7 +9,7 @@ LD = ppc-morphos-gcc-6
 LDFLAGS = -nostartfiles -nostdlib -noixemul
 STRIP = ppc-morphos-strip --strip-unneeded --remove-section .comment
 OUTPUT = local.socket
-OBJS = dummy.o library.o
+OBJS = dummy.o library.o process.o
 METHOBJS = m_new.o \
  m_dispose.o \
  m_receive.o \
@@ -29,6 +29,10 @@ install: all
 	cp $(OUTPUT) /SYS/Classes
 	-flushlib $(OUTPUT)
 
+$(OBJS): %.o: %.c
+	@echo "Compiling $@..."
+	@$(CC) $(CFLAGS) -c -o $@ $<
+
 $(FUNCOBJS): %.o: %.c library.h
 	@echo "Compiling $@..."
 	@$(CC) $(CFLAGS) -c -o $@ $<
@@ -46,10 +50,11 @@ $(OUTPUT): $(OUTPUT).db
 	@$(STRIP) -o $(OUTPUT) $(OUTPUT).db
 
 library.o: library.c library.h lib_version.h
-	@echo "Compiling $@..."
-	@$(CC) $(CFLAGS) -c -o $@ $<
+#	@echo "Compiling $@..."
+#	@$(CC) $(CFLAGS) -c -o $@ $<
 
 dummy.o: dummy.c lib_version.h
-	@echo "Compiling $@..."
-	@$(CC) $(CFLAGS) -c -o $@ $<
+#	@echo "Compiling $@..."
+#	@$(CC) $(CFLAGS) -c -o $@ $<
 
+process.o: library.h

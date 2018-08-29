@@ -24,8 +24,28 @@ struct MyLibBase
 };
 
 
+struct StartupMsg
+{
+	struct Message     SysMsg;         // usual stuff
+	struct Message     CnfMsg;         // this is sent from subtask after succesfull init
+};
+
+
+struct PacketMsg
+{
+	struct Message     SysMsg;
+	UBYTE             *Payload;
+	UWORD              Flags;
+};
+
+
 struct ObjData
 {
+	struct Process         *Worker;
+	struct MsgPort         *WorkerPort;
+	struct MsgPort         *LocalPort;
+	struct StartupMsg       StartMsg;
+	struct PacketMsg        Packet;
 };
 
 

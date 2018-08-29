@@ -10,10 +10,10 @@
 
 /* attributes */
 
-#define SCKA_Blocking                           0x8EDA0001
-#define SCKA_Listen                             0x8EDA0002
-#define SCKA_RemoteAddr                         0x8EDA0003
-
+#define SCKA_Blocking                           0x8EDA0001  /* [I..] */
+#define SCKA_Listen                             0x8EDA0002  /* [I..] */
+#define SCKA_RemoteAddr                         0x8EDA0003  /* [I.G] */
+#define SCKA_LocalAddr                          0x8EDA0004  /* [I.G] */
 
 /* methods */
 
