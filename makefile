@@ -1,11 +1,11 @@
 # Makefile for local.socket.
 # Generated with LibMaker 0.12.
 
-CC = ppc-morphos-gcc-4
+CC = ppc-morphos-gcc-6
 CFLAGS += -s -O2 -noixemul -nostdlib -fomit-frame-pointer -DUSE_INLINE_STDARG
 CFLAGS += -Wall -Wextra -Wpointer-arith
 CFLAGS += -Ios-include/
-LD = ppc-morphos-gcc-4
+LD = ppc-morphos-gcc-6
 LDFLAGS = -nostartfiles -nostdlib -noixemul
 STRIP = ppc-morphos-strip --strip-unneeded --remove-section .comment
 OUTPUT = local.socket
@@ -26,7 +26,7 @@ clean:
 	-rm -rf $(OBJS) $(FUNCOBJS) $(METHOBJS) *.bak *.s *.db $(OUTPUT)
 
 install: all
-	cp $(OUTPUT) /System/Classes
+	cp $(OUTPUT) /SYS/Classes
 	-flushlib $(OUTPUT)
 
 $(FUNCOBJS): %.o: %.c library.h

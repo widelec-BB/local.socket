@@ -12,7 +12,7 @@
 #include <exec/libraries.h>
 #include <exec/semaphores.h>
 #include <intuition/classes.h>
-#include <classes/local.h>
+#include <classes/local_socket.h>
 
 struct MyLibBase
 {

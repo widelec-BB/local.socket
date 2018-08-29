@@ -27,7 +27,7 @@ typedef const char* CONST_STRPTR;
 #include <clib/alib_protos.h>
 #include <proto/intuition.h>
 #include <proto/utility.h>
-#include <classes/local.h>
+#include <classes/local_socket.h>
 
 #define UNUSED __attribute__((unused))
 
