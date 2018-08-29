@@ -4,8 +4,8 @@
     Copyright © Grzegorz Kraszewski 2018. All rights reserved.
 */
 
-#ifndef CLASSES_LOCAL_H
-#define CLASSES_LOCAL_H
+#ifndef CLASSES_LOCAL_SOCKET_H
+#define CLASSES_LOCAL_SOCKET_H
 
 
 /* attributes */
@@ -45,4 +45,4 @@ struct SCKP_OnDataSent
 	ULONG MethodID;
 };
 
-#endif      /* CLASSES_LOCAL_H */
+#endif      /* CLASSES_LOCAL_SOCKET_H */
