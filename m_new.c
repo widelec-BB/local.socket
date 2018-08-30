@@ -1,5 +1,8 @@
 #include "library.h"
 
+#include <proto/dos.h>
+#include <dos/dostags.h>
+
 #if 0
 static struct Process* RunWorker(struct ObjData *d)
 {
