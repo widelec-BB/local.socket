@@ -29,15 +29,7 @@ install: all
 	cp $(OUTPUT) /SYS/Classes
 	-flushlib $(OUTPUT)
 
-$(OBJS): %.o: %.c
-	@echo "Compiling $@..."
-	@$(CC) $(CFLAGS) -c -o $@ $<
-
-$(FUNCOBJS): %.o: %.c library.h
-	@echo "Compiling $@..."
-	@$(CC) $(CFLAGS) -c -o $@ $<
-
-$(METHOBJS): %.o: %.c library.h
+$(OBJS) $(FUNCOBJS) $(METHOBJS): %.o: %.c
 	@echo "Compiling $@..."
 	@$(CC) $(CFLAGS) -c -o $@ $<
 
@@ -49,12 +41,12 @@ $(OUTPUT): $(OUTPUT).db
 	@echo "Stripping $<..."
 	@$(STRIP) -o $(OUTPUT) $(OUTPUT).db
 
-library.o: library.c library.h lib_version.h
-#	@echo "Compiling $@..."
-#	@$(CC) $(CFLAGS) -c -o $@ $<
-
 dummy.o: dummy.c lib_version.h
-#	@echo "Compiling $@..."
-#	@$(CC) $(CFLAGS) -c -o $@ $<
-
-process.o: library.h
+library.o: library.c lib_version.h library.h process.h
+m_dispose.o: m_dispose.c library.h process.h
+m_new.o: m_new.c library.h process.h
+m_ondatareceived.o: m_ondatareceived.c library.h process.h
+m_ondatasent.o: m_ondatasent.c library.h process.h
+m_receive.o: m_receive.c library.h process.h
+m_send.o: m_send.c library.h process.h
+process.o: process.c process.h
