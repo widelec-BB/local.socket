@@ -14,6 +14,8 @@
 #include <intuition/classes.h>
 #include <classes/local_socket.h>
 
+#include "process.h"
+
 struct MyLibBase
 {
 	struct Library          LibNode;
@@ -21,21 +23,6 @@ struct MyLibBase
 	struct SignalSemaphore  BaseLock;
 	BOOL                    InitFlag;
 	Class*                  BoopsiClass;
-};
-
-
-struct StartupMsg
-{
-	struct Message     SysMsg;         // usual stuff
-	struct Message     CnfMsg;         // this is sent from subtask after succesfull init
-};
-
-
-struct PacketMsg
-{
-	struct Message     SysMsg;
-	UBYTE             *Payload;
-	UWORD              Flags;
 };
 
 

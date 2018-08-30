@@ -3,7 +3,7 @@
 
 CC = ppc-morphos-gcc-6
 CFLAGS += -s -O2 -noixemul -nostdlib -fomit-frame-pointer -DUSE_INLINE_STDARG
-CFLAGS += -Wall -Wextra -Wpointer-arith
+CFLAGS += -Wall -Wextra -Wpointer-arith -Wno-parentheses
 CFLAGS += -Ios-include/
 LD = ppc-morphos-gcc-6
 LDFLAGS = -nostartfiles -nostdlib -noixemul
