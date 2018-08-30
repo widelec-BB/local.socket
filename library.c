@@ -292,8 +292,6 @@ IPTR New(Class *cl, Object *obj, struct opSet *msg);
 IPTR Dispose(Class *cl, Object *obj, Msg msg);
 IPTR Receive(Class *cl, Object *obj, struct SCKP_Receive *msg);
 IPTR Send(Class *cl, Object *obj, struct SCKP_Send *msg);
-IPTR OnDataReceived(Class *cl, Object *obj, struct SCKP_OnDataReceived *msg);
-IPTR OnDataSent(Class *cl, Object *obj, struct SCKP_OnDataSent *msg);
 
 
 static IPTR ClassDispatcher(void)
@@ -308,8 +306,6 @@ static IPTR ClassDispatcher(void)
 		case OM_DISPOSE: return Dispose(cl, obj, msg);
 		case SCKM_Receive: return Receive(cl, obj, (struct SCKP_Receive*)msg);
 		case SCKM_Send: return Send(cl, obj, (struct SCKP_Send*)msg);
-		case SCKM_OnDataReceived: return OnDataReceived(cl, obj, (struct SCKP_OnDataReceived*)msg);
-		case SCKM_OnDataSent: return OnDataSent(cl, obj, (struct SCKP_OnDataSent*)msg);
 		default: return DoSuperMethodA(cl, obj, msg);
 	}
 }
