@@ -14,7 +14,13 @@ struct StartupMsg
 struct PacketMsg
 {
 	struct Message     SysMsg;
+	UBYTE             *Payload;
+	UWORD              Flags;
 };
+
+/* Packet flags */
+
+#define PKTFLAG_DIE		0x8000    // ignore payload, disconnect, exit worker
 
 
 LONG Worker(void);
