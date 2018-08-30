@@ -6,9 +6,7 @@
 
 static void StopWorker(struct ObjData *d)
 {
-	// TODO: implement
-	
-	return;
+	SendPacket(d, NULL, PKTFLAG_DIE);
 }
 
 
