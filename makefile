@@ -13,10 +13,8 @@ OBJS = dummy.o library.o process.o
 METHOBJS = m_new.o \
  m_dispose.o \
  m_receive.o \
- m_send.o \
- m_ondatareceived.o \
- m_ondatasent.o
-
+ m_send.o
+ 
 .PHONY: all clean install
 
 all: $(OUTPUT)

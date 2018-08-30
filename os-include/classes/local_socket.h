@@ -31,18 +31,4 @@ struct SCKP_Send
 	ULONG MethodID;
 };
 
-#define SCKM_OnDataReceived                     0x8EDA0103
-
-struct SCKP_OnDataReceived
-{
-	ULONG MethodID;
-};
-
-#define SCKM_OnDataSent                         0x8EDA0104
-
-struct SCKP_OnDataSent
-{
-	ULONG MethodID;
-};
-
 #endif      /* CLASSES_LOCAL_SOCKET_H */
