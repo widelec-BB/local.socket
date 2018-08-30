@@ -40,7 +40,7 @@ extern const char VTag[];
 struct Library *SysBase;
 struct Library *IntuitionBase;
 struct Library *UtilityBase;
-
+struct Library *DOSBase;
 
 struct Library *LibInit(struct Library *unused, APTR seglist, struct Library *sysb);
 struct MyLibBase *lib_init(struct MyLibBase *base, APTR seglist, struct Library *SysBase);
@@ -60,6 +60,7 @@ static IPTR ClassDispatcher(void);
 
 BOOL InitResources(struct MyLibBase *base)
 {
+	if (!(DOSBase = OpenLibrary("dos.library", 50))) return FALSE;
 	if (!(IntuitionBase = OpenLibrary("intuition.library", 50))) return FALSE;
 	if (!(UtilityBase = OpenLibrary("utility.library", 50))) return FALSE;
 
@@ -85,6 +86,7 @@ BOOL FreeResources(struct MyLibBase *base)
 
 	if (UtilityBase) CloseLibrary(UtilityBase);
 	if (IntuitionBase) CloseLibrary(IntuitionBase);
+	if (DOSBase) CloseLibrary(DOSBase);
 	return TRUE;
 }
 
