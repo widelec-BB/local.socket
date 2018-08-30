@@ -313,3 +313,18 @@ static IPTR ClassDispatcher(void)
 		default: return DoSuperMethodA(cl, obj, msg);
 	}
 }
+
+//------------------------------------------------------------------------------
+
+UWORD SendPacket(struct ObjData *d, UBYTE *payload, UWORD flags)
+{
+	d->Packet.SysMsg.mn_Node.ln_Type = NT_MESSAGE;
+	d->Packet.SysMsg.mn_Length = sizeof(struct PacketMsg);
+	d->Packet.SysMsg.mn_ReplyPort = d->LocalPort;
+	d->Packet.Payload = payload;
+	d->Packet.Flags = flags;
+	PutMsg(d->WorkerPort, &d->Packet.SysMsg);
+	WaitPort(d->LocalPort);
+	GetMsg(d->LocalPort);
+	return d->Packet.Flags;
+}

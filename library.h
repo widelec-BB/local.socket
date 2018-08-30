@@ -36,4 +36,7 @@ struct ObjData
 };
 
 
+UWORD SendPacket(struct ObjData *d, UBYTE *payload, UWORD flags);
+
+
 #endif      /* LOCAL_LIBRARY_H */
