@@ -125,6 +125,7 @@ static void ProcessCleanup(struct SubData *sd)
 }
 
 
+
 LONG Worker(void)
 {
 	struct Library *SysBase = *(struct Library**)4L;
@@ -138,10 +139,6 @@ LONG Worker(void)
 
 	if (!sm || !sd.CommPort) return 0;   // general failure, can do nothing but exit
 
-	// Initialization of confirmation message sent back to the creator. This
-	// message is already allocated inside the startup message. Thanks to this
-	// I need not to allocate it here and take care of errors.
-
 	cm = &sm->CnfMsg;
 	cm->mn_Node.ln_Type = NT_MESSAGE;
 	cm->mn_Length = sizeof(struct Message);
@@ -149,9 +146,6 @@ LONG Worker(void)
 
 	if (ProcessSetup(&sd))
 	{
-		// Send confirmation message and get the reply. Continue to the main
-		// loop then.
-
 		PutMsg(sm->SysMsg.mn_ReplyPort, cm);
 		WaitPort(sd.CommPort);
 		GetMsg(sd.CommPort);
@@ -159,10 +153,6 @@ LONG Worker(void)
 	}
 	
 	ProcessCleanup(&sd);
-
-	// After return startup message is replied automaticaly with ErrCode field
-	// set.
-
 	return 0;
 }
 
