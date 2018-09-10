@@ -94,6 +94,11 @@ static void Loop(struct SubData *sd)
 
 		while (pm = (struct PacketMsg*)GetMsg(sd->CommPort))
 		{
+			if (pm->Flags & PKTFLAG_DIE)
+			{
+				running = FALSE;
+			}
+			
 			ReplyMsg((struct Message*)pm);
 		}
 	}
