@@ -51,7 +51,10 @@ int Main(UNUSED struct WBStartup *wbmessage)
 		TAG_END))
 		{
 			Printf("Created 'local.socket' object at $%08lx.\n", (LONG)obj1);
+			PutStr("Waiting for CTRL+C to exit...\n");
+			Wait(SIGBREAKF_CTRL_C);
 			DisposeObject(obj1);
+			PutStr("Object disposed.\n");
 		}
 		
 		result = RETURN_OK;
