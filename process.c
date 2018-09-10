@@ -88,18 +88,14 @@ static void Loop(struct SubData *sd)
 	LOCAL_BASE(Sys);
 	BOOL running = TRUE;
 	struct PacketMsg *pm;
-	
+
 	while (running)
 	{
 		WaitPort(sd->CommPort);
 
 		while (pm = (struct PacketMsg*)GetMsg(sd->CommPort))
 		{
-			if (pm->Flags & PKTFLAG_DIE)
-			{
-				running = FALSE;
-			}
-			
+			if (pm->Flags & PKTFLAG_DIE) running = FALSE;
 			ReplyMsg((struct Message*)pm);
 		}
 	}
@@ -115,7 +111,7 @@ static BOOL ProcessSetup(struct SubData *sd)
 		{
 			return TRUE;
 		}
-		
+
 		CleanupEvent(sd, &sd->RxEvent);
 	}
 	
@@ -157,8 +153,8 @@ LONG Worker(void)
 		GetMsg(sd.CommPort);
 		Loop(&sd);
 	}
-	
+
 	ProcessCleanup(&sd);
-	
+
 	return 0;
 }
