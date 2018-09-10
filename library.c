@@ -145,7 +145,7 @@ Class* InitClass(struct MyLibBase *base)
 {
 	Class *cl = NULL;
 
-	if ((cl = MakeClass(LibName, "", NULL, sizeof(struct ObjData), 0L)))
+	if ((cl = MakeClass(LibName, "rootclass", NULL, sizeof(struct ObjData), 0L)))
 	{
 		cl->cl_Dispatcher.h_Entry = (HOOKFUNC)&ClassDispatcher_gate;
 		cl->cl_UserData = (ULONG)base;
