@@ -2,10 +2,11 @@
 
 #include <proto/exec.h>
 #include <proto/dos.h>
-#include <proto/locale.h>
+#include <proto/intuition.h>
 
 #include <workbench/startup.h>
 #include <workbench/workbench.h>
+#include <intuition/classusr.h>
 
 
 extern struct Library *SysBase;
@@ -42,7 +43,17 @@ int Main(UNUSED struct WBStartup *wbmessage)
 
 	if (GetResources())
 	{
+		Object *obj1;
+		
 		Printf("LocalSocketBase = $%08lx.\n", (LONG)LocalSocketBase);
+		
+		if (obj1 = NewObject(NULL, "local.socket",
+		TAG_END))
+		{
+			Printf("Created 'local.socket' object at $%08lx.\n", (LONG)obj1);
+			DisposeObject(obj1);
+		}
+		
 		result = RETURN_OK;
 	}
 	else PutStr("GetResources() failed.\n");
