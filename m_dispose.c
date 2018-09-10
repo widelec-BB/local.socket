@@ -7,6 +7,13 @@
 static void StopWorker(struct ObjData *d)
 {
 	SendPacket(d, NULL, PKTFLAG_DIE);
+	
+	/* Waiting for startup message to be sent back. */
+	
+	WaitPort(d->LocalPort);
+	GetMsg(d->LocalPort);
+	
+	/* Worker process is no longer running. */
 }
 
 

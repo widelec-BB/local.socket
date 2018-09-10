@@ -8,9 +8,10 @@ typedef const char* CONST_STRPTR;
 
 #include <proto/exec.h>
 #include <proto/intuition.h>
-#include <proto/dos.h>
-#include <proto/multimedia.h>
-#include <exec/memory.h>
+
+#include <dos/dosextens.h>
+//#include <exec/memory.h>
+
 
 #include "process.h"
 
@@ -87,7 +88,7 @@ static void Loop(struct SubData *sd)
 	LOCAL_BASE(Sys);
 	BOOL running = TRUE;
 	struct PacketMsg *pm;
-
+	
 	while (running)
 	{
 		WaitPort(sd->CommPort);
@@ -158,7 +159,6 @@ LONG Worker(void)
 	}
 	
 	ProcessCleanup(&sd);
+	
 	return 0;
 }
-
-///

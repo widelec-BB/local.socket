@@ -25,8 +25,8 @@ static struct Process* RunWorker(struct ObjData *d)
 		NP_StartupMsg, (ULONG)&d->StartMsg,
 	TAG_END);
 
-	// There are two alternatives now. I can get StartMsg back with error code, it means
-	// player process failed. I can get a ConfirmMsg however, it means success.
+	/* There are two alternatives now. I can get StartMsg back with error code, it means */
+	/* player process failed. I can get a ConfirmMsg however, it means success.          */
 
 	WaitPort(d->LocalPort);
 	m = GetMsg(d->LocalPort);
