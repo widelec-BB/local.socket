@@ -8,6 +8,7 @@ struct StartupMsg
 {
 	struct Message     SysMsg;         // usual stuff
 	struct Message     CnfMsg;         // this is sent from subtask after succesfull init
+	BOOL               Listen;
 };
 
 

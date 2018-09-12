@@ -12,6 +12,7 @@ typedef const char* CONST_STRPTR;
 #include <dos/dosextens.h>
 //#include <exec/memory.h>
 
+#include <libvstring.h>
 
 #include "process.h"
 

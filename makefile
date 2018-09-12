@@ -4,9 +4,9 @@
 CC = ppc-morphos-gcc-6
 CFLAGS += -s -O2 -noixemul -nostdlib -fomit-frame-pointer -DUSE_INLINE_STDARG
 CFLAGS += -Wall -Wextra -Wpointer-arith -Wno-parentheses
-CFLAGS += -Ios-include/
+CFLAGS += -Ios-include/ -Ilibvstring/
 LD = ppc-morphos-gcc-6
-LDFLAGS = -nostartfiles -nostdlib -noixemul
+LDFLAGS = -nostartfiles -nostdlib -noixemul -Llibvstring/ -lvstring
 STRIP = ppc-morphos-strip --strip-unneeded --remove-section .comment
 OUTPUT = local.socket
 OBJS = dummy.o library.o process.o
@@ -43,8 +43,6 @@ dummy.o: dummy.c lib_version.h
 library.o: library.c lib_version.h library.h process.h
 m_dispose.o: m_dispose.c library.h process.h
 m_new.o: m_new.c library.h process.h
-m_ondatareceived.o: m_ondatareceived.c library.h process.h
-m_ondatasent.o: m_ondatasent.c library.h process.h
 m_receive.o: m_receive.c library.h process.h
 m_send.o: m_send.c library.h process.h
 process.o: process.c process.h
