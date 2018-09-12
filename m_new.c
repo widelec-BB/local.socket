@@ -38,6 +38,17 @@ static struct Process* RunWorker(struct ObjData *d)
 
 
 
+BOOL ParseTags(Object *obj, struct ObjData *d, struct TagItem *taglist)
+{
+	/* SCKA_Listen is checked first, as validity of other tags */
+	/* depends on value of this one.                           */
+	
+	d->StartMsg.Listen = GetTagData(SCKA_Listen, FALSE, taglist);
+	
+	return TRUE;
+}
+
+
 
 IPTR New(Class *cl, Object *obj, struct opSet *msg)
 {
@@ -53,7 +64,10 @@ IPTR New(Class *cl, Object *obj, struct opSet *msg)
 		{
 			if (d->Worker = RunWorker(d))
 			{
-				newobj = (IPTR)obj;
+				if (ParseTags(obj, d, msg->ops_AttrList))
+				{
+					newobj = (IPTR)obj;
+				}
 			}
 		}
 	}
