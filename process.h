@@ -9,6 +9,8 @@ struct StartupMsg
 	struct Message     SysMsg;         // usual stuff
 	struct Message     CnfMsg;         // this is sent from subtask after succesfull init
 	BOOL               Listen;
+	BOOL               Blocking;
+	STRPTR             Address;        // local in listening mode, remote in connect mode
 };
 
 

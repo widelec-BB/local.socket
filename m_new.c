@@ -40,12 +40,21 @@ static struct Process* RunWorker(struct ObjData *d)
 
 BOOL ParseTags(Object *obj, struct ObjData *d, struct TagItem *taglist)
 {
+	ULONG addr_tag;
+	
 	/* SCKA_Listen is checked first, as validity of other tags */
 	/* depends on value of this one.                           */
-	
+
 	d->StartMsg.Listen = GetTagData(SCKA_Listen, FALSE, taglist);
+
+	if (d->StartMsg.Listen) addr_tag = SCKA_LocalAddr;
+	else addr_tag = SCKA_RemoteAddr;
 	
-	return TRUE;
+	d->StartMsg.Address = (STRPTR)GetTagData(addr_tag, 0, taglist);
+
+	if (d->StartMsg.Address) return TRUE;
+	
+	return FALSE;
 }
 
 
