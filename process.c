@@ -33,54 +33,11 @@ struct SubData
 	struct Library  *SysBase;
 	struct Event     TxEvent;
 	struct Event     RxEvent;
-	struct MsgPort  *CommPort;
+	struct MsgPort  *CommPort;      // communication with creator application
+	BOOL             Listen;
+	STRPTR           LocalAddr;
+	STRPTR           RemoteAddr;
 };
-
-
-
-static void DoEvents(struct SubData *sd, struct Event *ev)
-{
-	LOCAL_BASE(Sys);
-	struct Message *m;
-
-	if (ev->Process && ev->SigMask) Signal(&ev->Process->pr_Task, ev->SigMask);
-	while (m = GetMsg(ev->Port)) ReplyMsg(m);
-}
-
-
-
-static void DoTxEvents(struct SubData *sd)
-{
-	DoEvents(sd, &sd->TxEvent);
-}
-
-
-
-static void DoRxEvents(struct SubData *sd)
-{
-	DoEvents(sd, &sd->RxEvent);
-}
-
-
-
-static BOOL SetupEvent(struct SubData *sd, struct Event *ev)
-{
-	LOCAL_BASE(Sys);
-
-	ev->Process = NULL;
-	ev->SigMask = 0;
-	if (ev->Port = CreateMsgPort()) return TRUE;
-	return FALSE;
-}
-
-
-
-static void CleanupEvent(struct SubData *sd, struct Event *ev)
-{
-	LOCAL_BASE(Sys);
-
-	DeleteMsgPort(ev->Port);
-}
 
 
 
@@ -104,16 +61,19 @@ static void Loop(struct SubData *sd)
 
 
 
-static BOOL ProcessSetup(struct SubData *sd)
+static BOOL SetupAddresses(struct SubData *sd, struct StartupMsg *sm)
 {
-	if (SetupEvent(sd, &sd->RxEvent))
+	sd->LocalAddr = NULL;
+	sd->RemoteAddr = NULL;
+	sd->Listen = sm->Listen;
+	
+	if (sd->Listen)
 	{
-		if (SetupEvent(sd, &sd->TxEvent))
-		{
-			return TRUE;
-		}
-
-		CleanupEvent(sd, &sd->RxEvent);
+		if (sd->LocalAddr = StrNew(sm->Address)) return TRUE;
+	}
+	else
+	{
+		if (sd->RemoteAddr = StrNew(sm->Address)) return TRUE;
 	}
 	
 	return FALSE;
@@ -121,10 +81,18 @@ static BOOL ProcessSetup(struct SubData *sd)
 
 
 
+static BOOL ProcessSetup(struct SubData *sd, struct StartupMsg *sm)
+{
+	if (SetupAddresses(sd, sm)) return TRUE;
+	return FALSE;
+}
+
+
+
 static void ProcessCleanup(struct SubData *sd)
 {
-	CleanupEvent(sd, &sd->RxEvent);
-	CleanupEvent(sd, &sd->TxEvent);
+	if (sd->LocalAddr) StrFree(sd->LocalAddr);
+	if (sd->RemoteAddr) StrFree(sd->RemoteAddr);
 }
 
 
@@ -147,7 +115,7 @@ LONG Worker(void)
 	cm->mn_Length = sizeof(struct Message);
 	cm->mn_ReplyPort = sd.CommPort;
 
-	if (ProcessSetup(&sd))
+	if (ProcessSetup(&sd, sm))
 	{
 		PutMsg(sm->SysMsg.mn_ReplyPort, cm);
 		WaitPort(sd.CommPort);

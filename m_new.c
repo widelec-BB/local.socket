@@ -46,6 +46,7 @@ BOOL ParseTags(Object *obj, struct ObjData *d, struct TagItem *taglist)
 	/* depends on value of this one.                           */
 
 	d->StartMsg.Listen = GetTagData(SCKA_Listen, FALSE, taglist);
+	d->StartMsg.EventPort = (struct MsgPort*)GetTagData(SCKA_EventPort, 0, taglist);
 
 	if (d->StartMsg.Listen) addr_tag = SCKA_LocalAddr;
 	else addr_tag = SCKA_RemoteAddr;

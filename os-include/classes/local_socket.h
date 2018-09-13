@@ -10,10 +10,10 @@
 
 /* attributes */
 
-#define SCKA_Blocking                           0x8EDA0001  /* [I..] */
-#define SCKA_Listen                             0x8EDA0002  /* [I..] */
-#define SCKA_RemoteAddr                         0x8EDA0003  /* [I.G] */
-#define SCKA_LocalAddr                          0x8EDA0004  /* [I.G] */
+#define SCKA_EventPort                          0x8EDA0001  /* [I..], struct MsgPort* */
+#define SCKA_Listen                             0x8EDA0002  /* [I..], BOOL */
+#define SCKA_RemoteAddr                         0x8EDA0003  /* [I.G], STRPTR */
+#define SCKA_LocalAddr                          0x8EDA0004  /* [I.G], STRPTR */
 
 /* methods */
 
