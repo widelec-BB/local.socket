@@ -20,20 +20,13 @@ typedef const char* CONST_STRPTR;
 #define LOCAL_BASE(x) struct Library *x##Base = sd->x##Base
 
 
-struct Event
-{
-	struct MsgPort  *Port;
-	struct Process  *Process;
-	ULONG            SigMask;
-};
-
 
 struct SubData
 {
 	struct Library  *SysBase;
-	struct Event     TxEvent;
-	struct Event     RxEvent;
 	struct MsgPort  *CommPort;      // communication with creator application
+	struct MsgPort  *SockPort;      // communication with remote end
+	struct MsgPort  *EventPort;     // event messages will go there
 	BOOL             Listen;
 	STRPTR           LocalAddr;
 	STRPTR           RemoteAddr;
@@ -60,41 +53,32 @@ static void Loop(struct SubData *sd)
 }
 
 
+static void ListeningPort(struct SubData *sd, struct StartupMsg *sm)
+{
+	
+}
 
-static BOOL SetupAddresses(struct SubData *sd, struct StartupMsg *sm)
+
+static void ConnectingPort(struct SubData *sd, struct StartupMsg *sm)
+{
+	
+}
+
+
+static void LetsGo(struct SubData *sd, struct StartupMsg *sm)
 {
 	sd->LocalAddr = NULL;
 	sd->RemoteAddr = NULL;
 	sd->Listen = sm->Listen;
-	
-	if (sd->Listen)
+	sd->EventPort = sm->EventPort;
+
+	if (sd->SockPort = CreateMsgPort())
 	{
-		if (sd->LocalAddr = StrNew(sm->Address)) return TRUE;
+		if (sd->Listen) ListeningPort(sd, sm);
+		else ConnectingPort(sd, sm);
+		DeleteMsgPort(sd->SockPort);
 	}
-	else
-	{
-		if (sd->RemoteAddr = StrNew(sm->Address)) return TRUE;
-	}
-	
-	return FALSE;
 }
-
-
-
-static BOOL ProcessSetup(struct SubData *sd, struct StartupMsg *sm)
-{
-	if (SetupAddresses(sd, sm)) return TRUE;
-	return FALSE;
-}
-
-
-
-static void ProcessCleanup(struct SubData *sd)
-{
-	if (sd->LocalAddr) StrFree(sd->LocalAddr);
-	if (sd->RemoteAddr) StrFree(sd->RemoteAddr);
-}
-
 
 
 LONG Worker(void)
@@ -115,7 +99,10 @@ LONG Worker(void)
 	cm->mn_Length = sizeof(struct Message);
 	cm->mn_ReplyPort = sd.CommPort;
 
-	if (ProcessSetup(&sd, sm))
+	LetsGo(&sd, sm);
+	
+/*
+	if (Process&sd, sm))
 	{
 		PutMsg(sm->SysMsg.mn_ReplyPort, cm);
 		WaitPort(sd.CommPort);
@@ -124,6 +111,6 @@ LONG Worker(void)
 	}
 
 	ProcessCleanup(&sd);
-
+*/
 	return 0;
 }

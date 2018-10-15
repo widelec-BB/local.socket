@@ -15,12 +15,13 @@ METHOBJS = m_new.o \
  m_receive.o \
  m_send.o
  
-.PHONY: all clean install
+.PHONY: all clean install libvstring
 
-all: $(OUTPUT)
-	@ls -l $<
+all: libvstring $(OUTPUT)
+	@List $(OUTPUT) LFORMAT "%n %l %d %t"
 
 clean:
+	make -C libvstring/ clean
 	-rm -rf $(OBJS) $(FUNCOBJS) $(METHOBJS) *.bak *.s *.db $(OUTPUT)
 
 install: all
@@ -38,6 +39,9 @@ $(OUTPUT).db: $(OBJS) $(FUNCOBJS) $(METHOBJS)
 $(OUTPUT): $(OUTPUT).db
 	@echo "Stripping $<..."
 	@$(STRIP) -o $(OUTPUT) $(OUTPUT).db
+
+libvstring:
+	make -C libvstring/
 
 dummy.o: dummy.c lib_version.h
 library.o: library.c lib_version.h library.h process.h
