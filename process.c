@@ -12,6 +12,7 @@ typedef const char* CONST_STRPTR;
 #include <dos/dosextens.h>
 //#include <exec/memory.h>
 
+#include <clib/debug_protos.h>
 #include <libvstring.h>
 
 #include "process.h"
@@ -55,13 +56,13 @@ static void Loop(struct SubData *sd)
 
 static void ListeningPort(struct SubData *sd, struct StartupMsg *sm)
 {
-	
+	KPrintF("creating listening port\n");
 }
 
 
 static void ConnectingPort(struct SubData *sd, struct StartupMsg *sm)
 {
-	
+	KPrintF("creating connecting port\n");
 }
 
 
