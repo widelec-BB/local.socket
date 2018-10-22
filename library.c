@@ -17,8 +17,6 @@ typedef char* STRPTR;
 typedef const char* CONST_STRPTR;
 #define STRPTR_TYPEDEF
 
-#define __NOLIBBASE__
-
 #include <proto/exec.h>
 #include <exec/resident.h>
 #include <exec/libraries.h>

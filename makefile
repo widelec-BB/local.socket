@@ -2,7 +2,7 @@
 # Generated with LibMaker 0.12.
 
 CC = ppc-morphos-gcc-6
-CFLAGS += -s -O2 -noixemul -nostdlib -fomit-frame-pointer -DUSE_INLINE_STDARG
+CFLAGS += -s -O2 -noixemul -nostdlib -fomit-frame-pointer -DUSE_INLINE_STDARG -D__NOLIBBASE__
 CFLAGS += -Wall -Wextra -Wpointer-arith -Wno-parentheses
 CFLAGS += -Ios-include/ -Ilibvstring/
 LD = ppc-morphos-gcc-6
