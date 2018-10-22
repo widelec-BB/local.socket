@@ -2,6 +2,8 @@
 #include <proto/dos.h>
 #include <dos/dostags.h>
 
+#include "libvstring/libvstring.h"
+
 #include "library.h"
 #include "process.h"
 
@@ -38,24 +40,42 @@ static struct Process* RunWorker(struct ObjData *d)
 
 
 
-BOOL ParseTags(Object *obj, struct ObjData *d, struct TagItem *taglist)
+BOOL ParseTags(struct ObjData *d, struct TagItem *taglist)
 {
-	ULONG addr_tag;
-	
+	STRPTR s;
+
+	/*---------------------------------------------------------*/	
 	/* SCKA_Listen is checked first, as validity of other tags */
 	/* depends on value of this one.                           */
+	/*---------------------------------------------------------*/	
 
 	d->StartMsg.Listen = GetTagData(SCKA_Listen, FALSE, taglist);
 	d->StartMsg.EventPort = (struct MsgPort*)GetTagData(SCKA_EventPort, 0, taglist);
-
-	if (d->StartMsg.Listen) addr_tag = SCKA_LocalAddr;
-	else addr_tag = SCKA_RemoteAddr;
 	
-	d->StartMsg.Address = (STRPTR)GetTagData(addr_tag, 0, taglist);
+	/*-----------------------------------------------------------------------*/	
+	/* Both SCKA_LocalAddr and SCKA_RemoteAddr are required in connect mode, */
+	/* only SCKA_LocalAddr in listen mode.                                   */
+	/*-----------------------------------------------------------------------*/	
 
-	if (d->StartMsg.Address) return TRUE;
+	d->StartMsg.LocalAddr = NULL;
+	d->StartMsg.RemoteAddr = NULL;
 	
-	return FALSE;
+	if (d->StartMsg.Listen)
+	{
+		if (s = (STRPTR)GetTagData(SCKA_RemoteAddr, 0, taglist))
+		{
+			if (!(d->StartMsg.RemoteAddr = StrNew(s))) return FALSE;
+		}
+		else return FALSE;
+	}
+	
+	if (s = (STRPTR)GetTagData(SCKA_LocalAddr, 0, taglist))
+	{
+		if (!(d->StartMsg.LocalAddr = StrNew(s))) return FALSE;
+	}
+	else return FALSE;	
+
+	return TRUE;
 }
 
 
@@ -70,18 +90,16 @@ IPTR New(Class *cl, Object *obj, struct opSet *msg)
 	{
 		struct ObjData *d = INST_DATA(cl, obj);
 
-		if (d->LocalPort = CreateMsgPort())
+		if (ParseTags(d, msg->ops_AttrList))
 		{
-			if (d->Worker = RunWorker(d))
+			if (d->LocalPort = CreateMsgPort())
 			{
-				if (ParseTags(obj, d, msg->ops_AttrList))
-				{
-					newobj = (IPTR)obj;
-				}
+				if (d->Worker = RunWorker(d)) newobj = (IPTR)obj;
 			}
 		}
 	}
-	else CoerceMethod(cl, obj, OM_DISPOSE);
+	
+	if (!newobj) CoerceMethod(cl, obj, OM_DISPOSE);
 
 	return newobj;
 }

@@ -1,5 +1,7 @@
 #include <proto/exec.h>
 
+#include "libvstring/libvstring.h"
+
 #include "library.h"
 
 
@@ -31,6 +33,9 @@ IPTR Dispose(Class *cl, Object *obj, Msg msg)
 		
 		DeleteMsgPort(d->LocalPort);
 	}
+
+	if (d->StartMsg.LocalAddr) StrFree(d->StartMsg.LocalAddr);
+	if (d->StartMsg.RemoteAddr) StrFree(d->StartMsg.RemoteAddr);
 	
 	return DoSuperMethodA(cl, obj, msg);
 }

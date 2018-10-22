@@ -9,7 +9,8 @@ struct StartupMsg
 	struct Message     SysMsg;         // usual stuff
 	struct Message     CnfMsg;         // this is sent from subtask after succesfull init
 	BOOL               Listen;
-	STRPTR             Address;        // local in listening mode, remote in connect mode
+	STRPTR             LocalAddr;      // required in both modes
+	STRPTR             RemoteAddr;     // required in listen mode
 	struct MsgPort    *EventPort;      // event messages are sent there
 };
 
