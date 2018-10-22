@@ -16,6 +16,13 @@
 
 #include "process.h"
 
+extern struct Library
+	*SysBase,
+	*IntuitionBase,
+	*UtilityBase,
+	*DOSBase;
+
+
 struct MyLibBase
 {
 	struct Library          LibNode;
