@@ -28,13 +28,11 @@ int GetResources(void)
 }
 
 
-
 void FreeResources(void)
 {
 	if (LocalSocketBase) CloseLibrary(LocalSocketBase);
 	if (IntuitionBase) CloseLibrary(IntuitionBase);
 }
-
 
 
 int Main(UNUSED struct WBStartup *wbmessage)
@@ -56,6 +54,7 @@ int Main(UNUSED struct WBStartup *wbmessage)
 			DisposeObject(obj1);
 			PutStr("Object disposed.\n");
 		}
+		else PutStr("NewObject() returned NULL.\n");
 		
 		result = RETURN_OK;
 	}
