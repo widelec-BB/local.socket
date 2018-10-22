@@ -1,7 +1,5 @@
 /* Process code */
 
-
-#define __NOLIBBASE__
 typedef char* STRPTR;
 typedef const char* CONST_STRPTR;
 #define STRPTR_TYPEDEF
@@ -57,12 +55,14 @@ static void Loop(struct SubData *sd)
 static void ListeningPort(struct SubData *sd, struct StartupMsg *sm)
 {
 	KPrintF("creating listening port\n");
+	Loop(sd);
 }
 
 
 static void ConnectingPort(struct SubData *sd, struct StartupMsg *sm)
 {
 	KPrintF("creating connecting port\n");
+	Loop(sd);
 }
 
 
