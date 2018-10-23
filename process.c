@@ -52,9 +52,24 @@ static void Loop(struct SubData *sd)
 }
 
 
+static void SendLifeSign(struct SubData *sd, struct StartupMsg *sm)
+{
+	struct Message *cm;
+	
+	cm = &sm->CnfMsg;
+	cm->mn_Node.ln_Type = NT_MESSAGE;
+	cm->mn_Length = sizeof(struct Message);
+	cm->mn_ReplyPort = sd->CommPort;
+	PutMsg(sm->SysMsg.mn_ReplyPort, cm);
+	WaitPort(sd->CommPort);
+	GetMsg(sd->CommPort);
+}
+
+
 static void ListeningPort(struct SubData *sd, struct StartupMsg *sm)
 {
 	KPrintF("creating listening port\n");
+	SendLifeSign(sd, sm);
 	Loop(sd);
 }
 
@@ -62,6 +77,7 @@ static void ListeningPort(struct SubData *sd, struct StartupMsg *sm)
 static void ConnectingPort(struct SubData *sd, struct StartupMsg *sm)
 {
 	KPrintF("creating connecting port\n");
+	SendLifeSign(sd, sm);
 	Loop(sd);
 }
 
@@ -101,17 +117,6 @@ LONG Worker(void)
 	cm->mn_ReplyPort = sd.CommPort;
 
 	LetsGo(&sd, sm);
-	
-/*
-	if (Process&sd, sm))
-	{
-		PutMsg(sm->SysMsg.mn_ReplyPort, cm);
-		WaitPort(sd.CommPort);
-		GetMsg(sd.CommPort);
-		Loop(&sd);
-	}
 
-	ProcessCleanup(&sd);
-*/
 	return 0;
 }
