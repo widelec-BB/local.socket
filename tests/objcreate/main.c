@@ -8,6 +8,7 @@
 #include <workbench/workbench.h>
 #include <intuition/classusr.h>
 
+#include "../../os-include/classes/local_socket.h"
 
 extern struct Library *SysBase;
 extern struct Library *DOSBase;
@@ -18,6 +19,26 @@ struct Library *LocalSocketBase;
 
 __attribute__((section(".text"))) const char VString[] = "$VER: " APP_NAME " " APP_VER " (" APP_DATE ") ? " APP_CYEARS " " APP_AUTHOR;
 
+
+struct TestCase
+{
+	BOOL Listen;
+	STRPTR RemoteAddr;
+	STRPTR LocalAddr;
+	BOOL ResultExpected;
+};
+
+
+struct TestCase Tests[8] = {
+	{ FALSE, NULL, NULL, FALSE },			/* listen mode requires local, ignores remote */
+	{ FALSE, NULL, "Local1", TRUE },
+	{ FALSE, "Remote1", NULL, FALSE },
+	{ FALSE, "Remote1", "Local1", TRUE },
+	{ TRUE, NULL, NULL, FALSE },            /* active mode requires both the addresses */
+	{ TRUE, NULL, "Local1", FALSE },
+	{ TRUE, "Remote1", NULL, FALSE },
+	{ TRUE, "Remote1", "Local1", TRUE }
+};
 
 
 int GetResources(void)
@@ -41,20 +62,38 @@ int Main(UNUSED struct WBStartup *wbmessage)
 
 	if (GetResources())
 	{
-		Object *obj1;
+		int test;
 		
 		Printf("LocalSocketBase = $%08lx.\n", (LONG)LocalSocketBase);
 		
-		if (obj1 = NewObject(NULL, "local.socket",
-		TAG_END))
+		for (test = 0; test < 8; test++)
 		{
-			Printf("Created 'local.socket' object at $%08lx.\n", (LONG)obj1);
-			PutStr("Waiting for CTRL+C to exit...\n");
-			Wait(SIGBREAKF_CTRL_C);
-			DisposeObject(obj1);
-			PutStr("Object disposed.\n");
+			Object *obj1;
+			STRPTR local_addr = "NULL";
+			STRPTR remote_addr = "NULL";			
+
+			if (Tests[test].LocalAddr) local_addr = Tests[test].LocalAddr;
+			if (Tests[test].RemoteAddr) remote_addr = Tests[test].RemoteAddr;
+			
+			Printf("Listen = %s.\nLocalAddr = \"%s\".\nRemoteAddr = \"%s\".\nExpected result: %s.\n",
+				Tests[test].Listen ? (IPTR)"TRUE" : (IPTR)"FALSE", (IPTR)local_addr, (IPTR)remote_addr,
+				Tests[test].ResultExpected ? (IPTR)"SUCCESS" : (IPTR)"FAIL");
+			
+			obj1 = NewObject(NULL, "local.socket",
+				SCKA_Listen, Tests[test].Listen,
+				SCKA_LocalAddr, (IPTR)Tests[test].LocalAddr,
+				SCKA_RemoteAddr, (IPTR)Tests[test].RemoteAddr,
+			TAG_END);
+			
+			if (obj1)
+			{
+				PutStr("Encountered: SUCCESS.\n");
+				DisposeObject(obj1);
+			}
+			else PutStr("Encountered: FAIL.\n");
+			
+			PutStr("------\n");
 		}
-		else PutStr("NewObject() returned NULL.\n");
 		
 		result = RETURN_OK;
 	}
