@@ -30,12 +30,12 @@ struct TestCase
 
 
 struct TestCase Tests[8] = {
-	{ FALSE, NULL, NULL, FALSE },			/* listen mode requires local, ignores remote */
-	{ FALSE, NULL, "Local1", TRUE },
+	{ FALSE, NULL, NULL, FALSE },			/* active mode requires both the addresses */
+	{ FALSE, NULL, "Local1", FALSE },
 	{ FALSE, "Remote1", NULL, FALSE },
 	{ FALSE, "Remote1", "Local1", TRUE },
-	{ TRUE, NULL, NULL, FALSE },            /* active mode requires both the addresses */
-	{ TRUE, NULL, "Local1", FALSE },
+	{ TRUE, NULL, NULL, FALSE },            /* listen mode requires local, ignores remote */
+	{ TRUE, NULL, "Local1", TRUE },
 	{ TRUE, "Remote1", NULL, FALSE },
 	{ TRUE, "Remote1", "Local1", TRUE }
 };

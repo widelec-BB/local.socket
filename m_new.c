@@ -60,7 +60,7 @@ BOOL ParseTags(struct ObjData *d, struct TagItem *taglist)
 	d->StartMsg.LocalAddr = NULL;
 	d->StartMsg.RemoteAddr = NULL;
 	
-	if (d->StartMsg.Listen)
+	if (!d->StartMsg.Listen)
 	{
 		if (s = (STRPTR)GetTagData(SCKA_RemoteAddr, 0, taglist))
 		{
