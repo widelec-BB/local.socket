@@ -287,6 +287,7 @@ Class *GetClass(void)
 /* Prototypes of methods */
 
 IPTR New(Class *cl, Object *obj, struct opSet *msg);
+IPTR Get(Class *cl, Object *obj, struct opGet *msg);
 IPTR Dispose(Class *cl, Object *obj, Msg msg);
 IPTR Receive(Class *cl, Object *obj, struct SCKP_Receive *msg);
 IPTR Send(Class *cl, Object *obj, struct SCKP_Send *msg);
@@ -301,6 +302,7 @@ static IPTR ClassDispatcher(void)
 	switch(msg->MethodID)
 	{
 		case OM_NEW: return New(cl, obj, (struct opSet*)msg);
+		case OM_GET: return Get(cl, obj, (struct opGet*)msg);
 		case OM_DISPOSE: return Dispose(cl, obj, msg);
 		case SCKM_Receive: return Receive(cl, obj, (struct SCKP_Receive*)msg);
 		case SCKM_Send: return Send(cl, obj, (struct SCKP_Send*)msg);

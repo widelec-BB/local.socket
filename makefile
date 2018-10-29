@@ -11,10 +11,7 @@ LDFLAGS = -nostartfiles -nostdlib -noixemul -Llibvstring/
 STRIP = ppc-morphos-strip --strip-unneeded --remove-section .comment
 OUTPUT = local.socket
 OBJS = dummy.o library.o process.o
-METHOBJS = m_new.o \
- m_dispose.o \
- m_receive.o \
- m_send.o
+METHOBJS = m_new.o m_get.o m_dispose.o m_receive.o m_send.o
  
 .PHONY: all clean install libvstring
 
@@ -47,6 +44,7 @@ libvstring:
 dummy.o: dummy.c lib_version.h
 library.o: library.c lib_version.h library.h process.h
 m_dispose.o: m_dispose.c library.h process.h
+m_get.o: m_get.c library.h process.h
 m_new.o: m_new.c library.h process.h
 m_receive.o: m_receive.c library.h process.h
 m_send.o: m_send.c library.h process.h

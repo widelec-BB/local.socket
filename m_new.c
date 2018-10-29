@@ -5,7 +5,6 @@
 #include "libvstring/libvstring.h"
 
 #include "library.h"
-#include "process.h"
 
 
 static struct Process* RunWorker(struct ObjData *d)
